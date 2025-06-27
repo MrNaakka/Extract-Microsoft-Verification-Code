@@ -1,0 +1,15 @@
+
+*.o
+*.out
+*.exe
+main
+
+*.dSYM/
+
+*.log
+*.tmp
+
+.vscode/
+
+.DS_Store
+Thumbs.db
