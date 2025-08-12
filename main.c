@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <time.h>
-
+#include <ctype.h>
 int check_date(long date)
 { // date is given as nanoseconds
 	struct timespec current_time;
@@ -41,9 +41,17 @@ int callback(void *log, int column_count, char **colum_values, char **colum_name
 	{
 
 		char *message = *colum_values;
-
 		char verification_code[6 + 1];
-		strncpy(verification_code, message + 22, 6);
+
+		for (size_t i = 0; message[i] != '\0'; i++)
+		{
+
+			if (isdigit(message[i]))
+			{
+				strncpy(verification_code, &message[i], 6);
+				break;
+			}
+		}
 		verification_code[6] = '\0';
 
 		FILE *pipe = popen("pbcopy", "w");
@@ -67,7 +75,7 @@ int main(void)
 	const char *home = getenv("HOME");
 
 	char db_path[PATH_MAX];
-	sprintf(db_path, "%s/Library/messages/chat.db", home);
+	sprintf(db_path, "%s/Library/Messages/chat.db", home);
 
 	char log_dir_path[PATH_MAX];
 	sprintf(log_dir_path, "%s/Library/logs/Verification-code", home);
